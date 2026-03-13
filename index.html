@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock y Venta de Indumentaria</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>App de Stock y Venta de Indumentaria</h1>
+        <nav>
+            <ul>
+                <li><a href="#inicio" id="nav-inicio">Inicio</a></li>
+                <li><a href="#stock" id="nav-stock">Stock</a></li>
+                <li><a href="#catalogo" id="nav-catalogo">Catálogo</a></li>
+                <li><a href="#ventas" id="nav-ventas">Ventas</a></li>
+                <li><a href="#reportes" id="nav-reportes">Reportes</a></li>
+            </ul>
+        </nav>
+        <div id="carrito-container" style="position:absolute;top:16px;right:16px;background:#fff;border-radius:24px;padding:8px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;z-index:10;">
+            <span id="carrito-icon" style="font-size:1.2em;cursor:pointer;">🛒</span>
+            <span id="carrito-cantidad" style="margin-left:8px;font-weight:bold;">0</span>
+        </div>
+    </header>
+    <main>
+            <section id="catalogo" style="display:none;"></section>
+            <section id="ventas" style="display:none;"></section>
+            <section id="reportes" style="display:none;"></section>
+        <section id="inicio">
+            <h2>Bienvenido/a</h2>
+            <p>Gestioná tu stock y vendé ropa e indumentaria fácilmente. Cobrá por QR o compra web.</p>
+            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80" alt="Ropa e Indumentaria" style="max-width:100%;height:auto;border-radius:8px;">
+        </section>
+        <section id="stock" style="display:none;"></section>
+        <section id="barcode-scan" style="display:none;margin-top:32px;">
+            <h2>Escanear código de barra</h2>
+            <button id="start-scan">Iniciar escaneo</button>
+            <div id="scanner" style="display:none;margin-top:16px;">
+                <video id="barcode-video" style="width:100%;max-width:400px;border-radius:8px;"></video>
+                <p id="barcode-result"></p>
+            </div>
+            <form id="assign-stock-form" style="display:none;margin-top:16px;">
+                <label>Usuario:
+                    <input type="text" id="usuario" required>
+                </label>
+                <label>Stock a sumar:
+                    <input type="number" id="stock-sumar" min="1" value="1" required>
+                </label>
+                <button type="submit">Asignar stock</button>
+            </form>
+        </section>
+        <section id="catalogo" style="display:none;"></section>
+    </main>
+    <footer>
+        <p>&copy; 2026 App de Stock y Venta QR</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="stock.js"></script>
+    <script src="catalogo.js"></script>
+    <script src="ventas.js"></script>
+    <script>
+    // Navegación entre apartados
+    function mostrarApartado(apartado) {
+        document.getElementById('inicio').style.display = apartado === 'inicio' ? 'block' : 'none';
+        document.getElementById('stock').style.display = apartado === 'stock' ? 'block' : 'none';
+        document.getElementById('barcode-scan').style.display = apartado === 'stock' ? 'block' : 'none';
+        document.getElementById('catalogo').style.display = apartado === 'catalogo' ? 'block' : 'none';
+        document.getElementById('ventas').style.display = apartado === 'ventas' ? 'block' : 'none';
+        document.getElementById('reportes').style.display = apartado === 'reportes' ? 'block' : 'none';
+        if (apartado === 'ventas') renderVentas();
+        if (apartado === 'catalogo') renderCatalogo();
+        if (apartado === 'stock') renderStock();
+        if (apartado === 'reportes') renderReportes();
+    }
+        document.getElementById('nav-reportes').addEventListener('click', function(e) {
+            e.preventDefault();
+            mostrarApartado('reportes');
+        });
+        // Reportes de ventas
+        function renderReportes() {
+            const reportesSection = document.getElementById('reportes');
+            reportesSection.innerHTML = `
+                <h2>Reportes de ventas</h2>
+                <div style="margin-bottom:16px;">
+                    <label>Día: <input type="date" id="filtro-dia"></label>
+                    <label>Mes: <input type="month" id="filtro-mes"></label>
+                    <label>Año: <input type="number" id="filtro-anio" min="2000" max="2100" style="width:80px;"></label>
+                    <button onclick="descargarCSV()">Descargar CSV</button>
+                </div>
+                <div id="tabla-reportes"></div>
+            `;
+            mostrarTablaReportes();
+            document.getElementById('filtro-dia').addEventListener('change', mostrarTablaReportes);
+            document.getElementById('filtro-mes').addEventListener('change', mostrarTablaReportes);
+            document.getElementById('filtro-anio').addEventListener('input', mostrarTablaReportes);
+        }
+
+        // Simulación de ventas
+        const ventasRealizadas = [
+            { fecha: '2026-03-09', producto: 'Remera básica', cantidad: 2, total: 7000 },
+            { fecha: '2026-03-09', producto: 'Campera de jean', cantidad: 1, total: 9500 },
+            { fecha: '2026-03-10', producto: 'Vestido casual', cantidad: 1, total: 5200 },
+            { fecha: '2026-03-10', producto: 'Pantalón jogger', cantidad: 3, total: 12600 },
+            { fecha: '2026-03-11', producto: 'Remera básica', cantidad: 1, total: 3500 },
+            { fecha: '2026-02-15', producto: 'Campera de jean', cantidad: 2, total: 19000 },
+            { fecha: '2025-12-20', producto: 'Vestido casual', cantidad: 1, total: 5200 }
+        ];
+
+        function mostrarTablaReportes() {
+            const dia = document.getElementById('filtro-dia').value;
+            const mes = document.getElementById('filtro-mes').value;
+            const anio = document.getElementById('filtro-anio').value;
+            let filtradas = ventasRealizadas;
+            if (dia) {
+                filtradas = filtradas.filter(v => v.fecha === dia);
+            } else if (mes) {
+                filtradas = filtradas.filter(v => v.fecha.startsWith(mes));
+            } else if (anio) {
+                filtradas = filtradas.filter(v => v.fecha.startsWith(anio));
+            }
+            let html = `<table class='reportes-table'><thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th><th>Total</th></tr></thead><tbody>`;
+            if (filtradas.length === 0) {
+                html += `<tr><td colspan='4'>No hay ventas para el filtro seleccionado.</td></tr>`;
+            } else {
+                filtradas.forEach(v => {
+                    html += `<tr><td>${v.fecha}</td><td>${v.producto}</td><td>${v.cantidad}</td><td>$${v.total}</td></tr>`;
+                });
+            }
+            html += `</tbody></table>`;
+            document.getElementById('tabla-reportes').innerHTML = html;
+        }
+
+        window.descargarCSV = function() {
+            const dia = document.getElementById('filtro-dia').value;
+            const mes = document.getElementById('filtro-mes').value;
+            const anio = document.getElementById('filtro-anio').value;
+            let filtradas = ventasRealizadas;
+            if (dia) {
+                filtradas = filtradas.filter(v => v.fecha === dia);
+            } else if (mes) {
+                filtradas = filtradas.filter(v => v.fecha.startsWith(mes));
+            } else if (anio) {
+                filtradas = filtradas.filter(v => v.fecha.startsWith(anio));
+            }
+            let csv = 'Fecha,Producto,Cantidad,Total\n';
+            filtradas.forEach(v => {
+                csv += `${v.fecha},${v.producto},${v.cantidad},${v.total}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ventas.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+    document.getElementById('nav-inicio').addEventListener('click', function(e) {
+        e.preventDefault();
+        mostrarApartado('inicio');
+    });
+    document.getElementById('nav-stock').addEventListener('click', function(e) {
+        e.preventDefault();
+        mostrarApartado('stock');
+    });
+    document.getElementById('nav-catalogo').addEventListener('click', function(e) {
+        e.preventDefault();
+        mostrarApartado('catalogo');
+    });
+    document.getElementById('nav-ventas').addEventListener('click', function(e) {
+        e.preventDefault();
+        mostrarApartado('ventas');
+    });
+    // Acceso a ventas desde el icono del carrito
+    document.getElementById('carrito-icon').addEventListener('click', function() {
+        mostrarApartado('ventas');
+    });
+    // Por defecto mostrar inicio
+    mostrarApartado('inicio');
+    </script>
+</body>
+</html>
