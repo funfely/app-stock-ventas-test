@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock y Venta de Indumentaria</title>
+    <title>Cloudy app de stock y venta de indumentaria web</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>App de Stock y Venta de Indumentaria</h1>
+        <h1>Cloudy app de stock y venta de indumentaria web</h1>
         <nav>
             <ul>
                 <li><a href="#inicio" id="nav-inicio">Inicio</a></li>
-                <li><a href="#stock" id="nav-stock">Stock</a></li>
+                <li id="nav-stock-item" style="display:none;"><a href="#stock" id="nav-stock">Stock</a></li>
+                <li id="nav-pagos-item" style="display:none;"><a href="#pagos" id="nav-pagos">Pagos</a></li>
                 <li><a href="#catalogo" id="nav-catalogo">Catálogo</a></li>
                 <li><a href="#ventas" id="nav-ventas">Ventas</a></li>
-                <li><a href="#reportes" id="nav-reportes">Reportes</a></li>
+                <li id="nav-reportes-item" style="display:none;"><a href="#reportes" id="nav-reportes">Reportes</a></li>
+                <li><button type="button" id="owner-access-btn" class="owner-access-btn">Accesos</button></li>
             </ul>
         </nav>
         <div id="carrito-container" style="position:absolute;top:16px;right:16px;background:#fff;border-radius:24px;padding:8px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;z-index:10;">
@@ -24,13 +26,71 @@
         </div>
     </header>
     <main>
+            <section id="pagos" style="display:none;"></section>
             <section id="catalogo" style="display:none;"></section>
             <section id="ventas" style="display:none;"></section>
             <section id="reportes" style="display:none;"></section>
         <section id="inicio">
-            <h2>Bienvenido/a</h2>
-            <p>Gestioná tu stock y vendé ropa e indumentaria fácilmente. Cobrá por QR o compra web.</p>
-            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80" alt="Ropa e Indumentaria" style="max-width:100%;height:auto;border-radius:8px;">
+            <div class="inicio-hero">
+                <div class="inicio-hero-texto">
+                    <span class="inicio-badge">✦ Gestión de indumentaria</span>
+                    <h2 class="inicio-titulo">Bienvenido/a a <span class="inicio-titulo-marca">Cloudy</span></h2>
+                    <p class="inicio-subtitulo">Gestioná tu stock, publicá tu catálogo y cobrá por QR o transferencia desde un solo lugar. Simple, rápido y profesional.</p>
+                    <div class="inicio-cta-grupo">
+                        <button class="inicio-cta-btn" onclick="mostrarApartado('catalogo')">Ver catálogo</button>
+                        <button class="inicio-cta-btn inicio-cta-btn--secundario" id="inicio-owner-btn" type="button">Accesos</button>
+                    </div>
+                </div>
+                <div class="inicio-hero-imagen-wrap">
+                    <img class="inicio-hero-imagen" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=700&q=80" alt="Ropa e Indumentaria">
+                </div>
+            </div>
+
+            <div class="inicio-stats" id="inicio-stats">
+                <div class="inicio-stat-card">
+                    <span class="inicio-stat-icono">👗</span>
+                    <span class="inicio-stat-valor" id="stat-productos">-</span>
+                    <span class="inicio-stat-label">Productos</span>
+                </div>
+                <div class="inicio-stat-card">
+                    <span class="inicio-stat-icono">📦</span>
+                    <span class="inicio-stat-valor" id="stat-stock-total">-</span>
+                    <span class="inicio-stat-label">Unidades en stock</span>
+                </div>
+                <div class="inicio-stat-card">
+                    <span class="inicio-stat-icono">🛒</span>
+                    <span class="inicio-stat-valor" id="stat-ventas">-</span>
+                    <span class="inicio-stat-label">Ventas registradas</span>
+                </div>
+                <div class="inicio-stat-card">
+                    <span class="inicio-stat-icono">💰</span>
+                    <span class="inicio-stat-valor" id="stat-facturado">-</span>
+                    <span class="inicio-stat-label">Total facturado</span>
+                </div>
+            </div>
+
+            <div class="inicio-accesos">
+                <div class="inicio-acceso-card inicio-acceso-card--private" id="inicio-owner-card">
+                    <span class="inicio-acceso-icono" id="inicio-owner-icon">🔒</span>
+                    <h3 id="inicio-owner-title">Accesos</h3>
+                    <p id="inicio-owner-desc">Ingresá con tu clave para administrar stock, precios y movimientos internos.</p>
+                </div>
+                <div class="inicio-acceso-card" onclick="mostrarApartado('catalogo')">
+                    <span class="inicio-acceso-icono">🛍️</span>
+                    <h3>Catálogo</h3>
+                    <p>Mostrá tus prendas con imagen y precio. Tus clientes agregan al carrito.</p>
+                </div>
+                <div class="inicio-acceso-card" onclick="mostrarApartado('ventas')">
+                    <span class="inicio-acceso-icono">💳</span>
+                    <h3>Ventas</h3>
+                    <p>Cobrá con QR, Mercado Pago, MODO o transferencia CBU al instante.</p>
+                </div>
+                <div id="inicio-reportes-card" class="inicio-acceso-card" style="display:none;" onclick="mostrarApartado('reportes')">
+                    <span class="inicio-acceso-icono">📊</span>
+                    <h3>Reportes</h3>
+                    <p>Revisá ventas y movimientos de stock con filtros por fecha o mes.</p>
+                </div>
+            </div>
         </section>
         <section id="stock" style="display:none;"></section>
         <section id="barcode-scan" style="display:none;margin-top:32px;">
@@ -50,113 +110,303 @@
                 <button type="submit">Asignar stock</button>
             </form>
         </section>
-        <section id="catalogo" style="display:none;"></section>
     </main>
     <footer>
-        <p>&copy; 2026 App de Stock y Venta QR</p>
+        <p class="footer-brand"><span class="footer-mark">✦</span> &copy; 2026 Cloudy</p>
+        <span class="footer-divider" aria-hidden="true"></span>
+        <p class="footer-subtitle">App de stock y venta de indumentaria web</p>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="stock.js"></script>
     <script src="catalogo.js"></script>
     <script src="ventas.js"></script>
     <script>
-    // Navegación entre apartados
+    const OWNER_SESSION_KEY = 'cloudyOwnerSession';
+    const OWNER_ACCESS_CODE = 'cloudy2026';
+
+    function esOwnerAutenticado() {
+        return localStorage.getItem(OWNER_SESSION_KEY) === 'true';
+    }
+
+    function actualizarAccesoOwnerUI() {
+        const ownerActivo = esOwnerAutenticado();
+        const navStockItem = document.getElementById('nav-stock-item');
+        const navPagosItem = document.getElementById('nav-pagos-item');
+        const navReportesItem = document.getElementById('nav-reportes-item');
+        const ownerAccessBtn = document.getElementById('owner-access-btn');
+        const inicioOwnerBtn = document.getElementById('inicio-owner-btn');
+        const ownerCard = document.getElementById('inicio-owner-card');
+        const ownerIcon = document.getElementById('inicio-owner-icon');
+        const ownerTitle = document.getElementById('inicio-owner-title');
+        const ownerDesc = document.getElementById('inicio-owner-desc');
+
+        if (navStockItem) {
+            navStockItem.style.display = ownerActivo ? 'list-item' : 'none';
+        }
+
+        if (navPagosItem) {
+            navPagosItem.style.display = ownerActivo ? 'list-item' : 'none';
+        }
+
+        if (navReportesItem) {
+            navReportesItem.style.display = ownerActivo ? 'list-item' : 'none';
+        }
+
+        const reportesCard = document.getElementById('inicio-reportes-card');
+        if (reportesCard) {
+            reportesCard.style.display = ownerActivo ? '' : 'none';
+        }
+
+        if (ownerAccessBtn) {
+            ownerAccessBtn.textContent = ownerActivo ? 'Salir owner' : 'Accesos';
+        }
+
+        if (inicioOwnerBtn) {
+            inicioOwnerBtn.textContent = ownerActivo ? 'Ver pagos' : 'Accesos';
+            inicioOwnerBtn.onclick = ownerActivo
+                ? () => mostrarApartado('pagos')
+                : () => manejarAccesoOwner();
+        }
+
+        if (ownerCard) {
+            ownerCard.onclick = ownerActivo
+                ? () => mostrarApartado('pagos')
+                : () => manejarAccesoOwner();
+        }
+
+        if (ownerIcon) ownerIcon.textContent = ownerActivo ? '💼' : '🔒';
+        if (ownerTitle) ownerTitle.textContent = ownerActivo ? 'Panel owner' : 'Accesos';
+        if (ownerDesc) {
+            ownerDesc.textContent = ownerActivo
+                ? 'Entrá al panel privado para aprobar pagos, devolver stock y gestionar entregas.'
+                : 'Ingresá con tu clave para administrar stock, precios y movimientos internos.';
+        }
+    }
+
+    function solicitarAccesoOwner() {
+        const clave = window.prompt('Ingresá la clave del owner para administrar stock:');
+        if (clave === null) return false;
+
+        if (clave !== OWNER_ACCESS_CODE) {
+            alert('Clave incorrecta.');
+            return false;
+        }
+
+        localStorage.setItem(OWNER_SESSION_KEY, 'true');
+        actualizarAccesoOwnerUI();
+        mostrarApartado('pagos');
+        return true;
+    }
+
+    function cerrarSesionOwner() {
+        localStorage.removeItem(OWNER_SESSION_KEY);
+        actualizarAccesoOwnerUI();
+        mostrarApartado('inicio');
+        alert('Saliste del modo owner.');
+    }
+
+    function manejarAccesoOwner() {
+        if (esOwnerAutenticado()) {
+            cerrarSesionOwner();
+            return;
+        }
+
+        solicitarAccesoOwner();
+    }
+
+    window.esOwnerAutenticado = esOwnerAutenticado;
+    window.manejarAccesoOwner = manejarAccesoOwner;
+
     function mostrarApartado(apartado) {
+        if ((apartado === 'stock' || apartado === 'pagos' || apartado === 'reportes') && !esOwnerAutenticado()) {
+            alert(`Solo el owner puede ver esa sección.`);
+            return;
+        }
+
         document.getElementById('inicio').style.display = apartado === 'inicio' ? 'block' : 'none';
+        document.getElementById('pagos').style.display = apartado === 'pagos' ? 'block' : 'none';
         document.getElementById('stock').style.display = apartado === 'stock' ? 'block' : 'none';
         document.getElementById('barcode-scan').style.display = apartado === 'stock' ? 'block' : 'none';
         document.getElementById('catalogo').style.display = apartado === 'catalogo' ? 'block' : 'none';
         document.getElementById('ventas').style.display = apartado === 'ventas' ? 'block' : 'none';
         document.getElementById('reportes').style.display = apartado === 'reportes' ? 'block' : 'none';
         if (apartado === 'ventas') renderVentas();
+        if (apartado === 'pagos' && typeof renderPagos === 'function') renderPagos();
         if (apartado === 'catalogo') renderCatalogo();
         if (apartado === 'stock') renderStock();
         if (apartado === 'reportes') renderReportes();
+        if (apartado === 'inicio') actualizarStatsInicio();
     }
         document.getElementById('nav-reportes').addEventListener('click', function(e) {
             e.preventDefault();
             mostrarApartado('reportes');
         });
         // Reportes de ventas
+        function tipoMovimientoTexto(tipo) {
+            if (tipo === 'entrada') return 'Nueva entrada de stock';
+            if (tipo === 'baja_falla') return 'Baja por falla del producto';
+            if (tipo === 'cambio_prenda') return 'Cambio de prenda';
+            if (tipo === 'salida_venta') return 'Salida por venta';
+            return tipo || 'Movimiento';
+        }
+
+        function obtenerDatosReporteFiltrados() {
+            const fechaExacta = document.getElementById('filtro-fecha').value;
+            const mesAnio = document.getElementById('filtro-mes-anio').value;
+
+            const ventasBase = typeof obtenerVentasRegistradas === 'function' ? obtenerVentasRegistradas() : [];
+            const movimientosBase = typeof obtenerMovimientosStock === 'function' ? obtenerMovimientosStock() : [];
+
+            const coincideFecha = (fecha) => {
+                if (fechaExacta) return fecha === fechaExacta;
+                if (mesAnio) return String(fecha || '').startsWith(mesAnio);
+                return true;
+            };
+
+            const ventasFiltradas = ventasBase.filter(v => coincideFecha(v.fecha));
+            const movimientosFiltrados = movimientosBase.filter(m => coincideFecha(m.fecha));
+
+            const lineasVenta = [];
+            ventasFiltradas.forEach(venta => {
+                (venta.items || []).forEach(item => {
+                    lineasVenta.push({
+                        fecha: venta.fecha,
+                        ventaId: venta.id,
+                        producto: item.nombre,
+                        cantidad: item.cantidad,
+                        total: item.subtotal,
+                        metodoPago: venta.metodoPago
+                    });
+                });
+            });
+
+            return {
+                ventasFiltradas,
+                movimientosFiltrados,
+                lineasVenta
+            };
+        }
+
         function renderReportes() {
             const reportesSection = document.getElementById('reportes');
             reportesSection.innerHTML = `
                 <h2>Reportes de ventas</h2>
-                <div style="margin-bottom:16px;">
-                    <label>Día: <input type="date" id="filtro-dia"></label>
-                    <label>Mes: <input type="month" id="filtro-mes"></label>
-                    <label>Año: <input type="number" id="filtro-anio" min="2000" max="2100" style="width:80px;"></label>
-                    <button onclick="descargarCSV()">Descargar CSV</button>
+                <div class="reportes-toolbar">
+                    <label>Fecha exacta
+                        <input type="date" id="filtro-fecha">
+                    </label>
+                    <label>Mes y año
+                        <input type="month" id="filtro-mes-anio">
+                    </label>
+                    <button type="button" onclick="descargarCSV()">Descargar CSV</button>
+                    <button type="button" onclick="limpiarFiltrosReportes()">Borrar selección</button>
                 </div>
+                <div id="resumen-reportes" class="reportes-resumen"></div>
                 <div id="tabla-reportes"></div>
+                <div id="tabla-movimientos-stock"></div>
             `;
             mostrarTablaReportes();
-            document.getElementById('filtro-dia').addEventListener('change', mostrarTablaReportes);
-            document.getElementById('filtro-mes').addEventListener('change', mostrarTablaReportes);
-            document.getElementById('filtro-anio').addEventListener('input', mostrarTablaReportes);
+            document.getElementById('filtro-fecha').addEventListener('change', mostrarTablaReportes);
+            document.getElementById('filtro-mes-anio').addEventListener('change', mostrarTablaReportes);
         }
-
-        // Simulación de ventas
-        const ventasRealizadas = [
-            { fecha: '2026-03-09', producto: 'Remera básica', cantidad: 2, total: 7000 },
-            { fecha: '2026-03-09', producto: 'Campera de jean', cantidad: 1, total: 9500 },
-            { fecha: '2026-03-10', producto: 'Vestido casual', cantidad: 1, total: 5200 },
-            { fecha: '2026-03-10', producto: 'Pantalón jogger', cantidad: 3, total: 12600 },
-            { fecha: '2026-03-11', producto: 'Remera básica', cantidad: 1, total: 3500 },
-            { fecha: '2026-02-15', producto: 'Campera de jean', cantidad: 2, total: 19000 },
-            { fecha: '2025-12-20', producto: 'Vestido casual', cantidad: 1, total: 5200 }
-        ];
 
         function mostrarTablaReportes() {
-            const dia = document.getElementById('filtro-dia').value;
-            const mes = document.getElementById('filtro-mes').value;
-            const anio = document.getElementById('filtro-anio').value;
-            let filtradas = ventasRealizadas;
-            if (dia) {
-                filtradas = filtradas.filter(v => v.fecha === dia);
-            } else if (mes) {
-                filtradas = filtradas.filter(v => v.fecha.startsWith(mes));
-            } else if (anio) {
-                filtradas = filtradas.filter(v => v.fecha.startsWith(anio));
+            const { ventasFiltradas, movimientosFiltrados, lineasVenta } = obtenerDatosReporteFiltrados();
+
+            const cantidadVentas = ventasFiltradas.length;
+            const cantidadPrendas = ventasFiltradas.reduce((acum, venta) => acum + (venta.cantidadPrendas || 0), 0);
+            const totalFacturado = ventasFiltradas.reduce((acum, venta) => acum + (venta.total || 0), 0);
+            const resumen = document.getElementById('resumen-reportes');
+            if (resumen) {
+                resumen.innerHTML = `
+                    <strong>Cantidad de ventas:</strong> ${cantidadVentas} |
+                    <strong>Prendas vendidas:</strong> ${cantidadPrendas} |
+                    <strong>Total facturado:</strong> $${totalFacturado}
+                `;
             }
-            let html = `<table class='reportes-table'><thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th><th>Total</th></tr></thead><tbody>`;
-            if (filtradas.length === 0) {
-                html += `<tr><td colspan='4'>No hay ventas para el filtro seleccionado.</td></tr>`;
+
+            let html = `<h3>Detalle de ventas cobradas</h3><div class='table-scroll'><table class='reportes-table'><thead><tr><th>Fecha</th><th>ID venta</th><th>Producto</th><th>Cantidad</th><th>Método</th><th>Total línea</th></tr></thead><tbody>`;
+            if (lineasVenta.length === 0) {
+                html += `<tr><td colspan='6'>No hay ventas para el filtro seleccionado.</td></tr>`;
             } else {
-                filtradas.forEach(v => {
-                    html += `<tr><td>${v.fecha}</td><td>${v.producto}</td><td>${v.cantidad}</td><td>$${v.total}</td></tr>`;
+                lineasVenta.forEach(v => {
+                    html += `<tr><td>${v.fecha}</td><td>${v.ventaId}</td><td>${v.producto}</td><td>${v.cantidad}</td><td>${v.metodoPago}</td><td>$${v.total}</td></tr>`;
                 });
             }
-            html += `</tbody></table>`;
+            html += `</tbody></table></div>`;
             document.getElementById('tabla-reportes').innerHTML = html;
+
+            let htmlMov = `<h3>Movimientos de stock</h3><div class='table-scroll'><table class='reportes-table'><thead><tr><th>Fecha</th><th>Tipo</th><th>Producto</th><th>Código</th><th>Cantidad</th><th>Motivo</th></tr></thead><tbody>`;
+            if (movimientosFiltrados.length === 0) {
+                htmlMov += `<tr><td colspan='6'>No hay movimientos de stock para el filtro seleccionado.</td></tr>`;
+            } else {
+                movimientosFiltrados.forEach(m => {
+                    htmlMov += `<tr><td>${m.fecha}</td><td>${tipoMovimientoTexto(m.tipo)}</td><td>${m.producto}</td><td>${m.codigo || '-'}</td><td>${m.cantidad}</td><td>${m.motivo || '-'}</td></tr>`;
+                });
+            }
+            htmlMov += `</tbody></table></div>`;
+            document.getElementById('tabla-movimientos-stock').innerHTML = htmlMov;
         }
 
+        window.limpiarFiltrosReportes = function() {
+            const filtroFecha = document.getElementById('filtro-fecha');
+            const filtroMesAnio = document.getElementById('filtro-mes-anio');
+
+            if (filtroFecha) filtroFecha.value = '';
+            if (filtroMesAnio) filtroMesAnio.value = '';
+            mostrarTablaReportes();
+        };
+
         window.descargarCSV = function() {
-            const dia = document.getElementById('filtro-dia').value;
-            const mes = document.getElementById('filtro-mes').value;
-            const anio = document.getElementById('filtro-anio').value;
-            let filtradas = ventasRealizadas;
-            if (dia) {
-                filtradas = filtradas.filter(v => v.fecha === dia);
-            } else if (mes) {
-                filtradas = filtradas.filter(v => v.fecha.startsWith(mes));
-            } else if (anio) {
-                filtradas = filtradas.filter(v => v.fecha.startsWith(anio));
-            }
-            let csv = 'Fecha,Producto,Cantidad,Total\n';
-            filtradas.forEach(v => {
-                csv += `${v.fecha},${v.producto},${v.cantidad},${v.total}\n`;
+            const { ventasFiltradas, movimientosFiltrados, lineasVenta } = obtenerDatosReporteFiltrados();
+            const cantidadVentas = ventasFiltradas.length;
+            const cantidadPrendas = ventasFiltradas.reduce((acum, venta) => acum + (venta.cantidadPrendas || 0), 0);
+            const totalFacturado = ventasFiltradas.reduce((acum, venta) => acum + (venta.total || 0), 0);
+
+            let csv = 'RESUMEN\n';
+            csv += `Cantidad de ventas,${cantidadVentas}\n`;
+            csv += `Prendas vendidas,${cantidadPrendas}\n`;
+            csv += `Total facturado,${totalFacturado}\n\n`;
+
+            csv += 'VENTAS COBRADAS\n';
+            csv += 'Fecha,Id venta,Producto,Cantidad,Metodo,Total linea\n';
+            lineasVenta.forEach(v => {
+                csv += `${v.fecha},${v.ventaId},${v.producto},${v.cantidad},${v.metodoPago},${v.total}\n`;
+            });
+
+            csv += '\nMOVIMIENTOS DE STOCK\n';
+            csv += 'Fecha,Tipo,Producto,Codigo,Cantidad,Motivo\n';
+            movimientosFiltrados.forEach(m => {
+                csv += `${m.fecha},${tipoMovimientoTexto(m.tipo)},${m.producto},${m.codigo || ''},${m.cantidad},${m.motivo || ''}\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'ventas.csv';
+            a.download = 'reporte-ventas-stock.csv';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            limpiarFiltrosReportes();
         };
+    function actualizarStatsInicio() {
+        const totalProductos = typeof productos !== 'undefined' ? productos.length : 0;
+        const totalStock = typeof productos !== 'undefined'
+            ? productos.reduce((s, p) => s + (Number(p.stock) || 0), 0)
+            : 0;
+        const ventas = typeof obtenerVentasRegistradas === 'function' ? obtenerVentasRegistradas() : [];
+        const totalVentas = ventas.length;
+        const totalFacturado = ventas.reduce((s, v) => s + (Number(v.total) || 0), 0);
+
+        const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+        el('stat-productos', totalProductos);
+        el('stat-stock-total', totalStock);
+        el('stat-ventas', totalVentas);
+        el('stat-facturado', '$' + totalFacturado.toLocaleString('es-AR'));
+    }
+
     document.getElementById('nav-inicio').addEventListener('click', function(e) {
         e.preventDefault();
         mostrarApartado('inicio');
@@ -164,6 +414,10 @@
     document.getElementById('nav-stock').addEventListener('click', function(e) {
         e.preventDefault();
         mostrarApartado('stock');
+    });
+    document.getElementById('nav-pagos').addEventListener('click', function(e) {
+        e.preventDefault();
+        mostrarApartado('pagos');
     });
     document.getElementById('nav-catalogo').addEventListener('click', function(e) {
         e.preventDefault();
@@ -173,10 +427,14 @@
         e.preventDefault();
         mostrarApartado('ventas');
     });
+    document.getElementById('owner-access-btn').addEventListener('click', function() {
+        manejarAccesoOwner();
+    });
     // Acceso a ventas desde el icono del carrito
     document.getElementById('carrito-icon').addEventListener('click', function() {
         mostrarApartado('ventas');
     });
+    actualizarAccesoOwnerUI();
     // Por defecto mostrar inicio
     mostrarApartado('inicio');
     </script>
